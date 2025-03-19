@@ -54,4 +54,5 @@ const formSchema = new mongoose.Schema({
   cabSignOffDate: String,
 });
 
-module.exports = mongoose.model("Form", formSchema);
+// Create and export the model
+module.exports = mongoose.model("FormData", formSchema); // Collection name: FormData

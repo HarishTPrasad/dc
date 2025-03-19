@@ -227,16 +227,16 @@ function FormA() {
     e.preventDefault();
 
     try {
-      // Send a POST request to the backend
+    
       const response = await api.post("/submit-form", formData);
 
-      // Log the response from the backend
+     
       console.log("Form submitted successfully:", response.data);
 
-      // Navigate to the output page
+    
       navigate("/output", { state: { formData } });
     } catch (err) {
-      // Handle errors
+ 
       console.error("Error submitting form:", err);
       alert("Failed to submit form. Please try again.");
     }

@@ -1,10 +1,10 @@
  
 const express = require("express");
-const User = require("../models/User");
+const User = require("../models/FormModel");
 
 const router = express.Router();
 
-// Create a new user
+
 const FormModel = require("./models/FormModel");
 
 app.post("/api/submit-form", (req, res) => {
