@@ -99,4 +99,4 @@ Use npm run dev in the backend to enable hot-reloading.
 
 📜 License
 
-This project is open-source and available under the MIT License.
+This project is not open-source and will be used officially only by DC Networks.
