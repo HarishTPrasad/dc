@@ -8,11 +8,7 @@ import ChangeImplementationTable from "./FormTables/ChangeImplementationTable";
 import api from "../api";
 
 const clientDataMap = {
-  "Balotra Urban Co-operative Bank Ltd.": {
-    requester: "Sourabh Bhardwaj",
-    approver: "Anil Devnani",
-    departmentLocation: "BWRUCB",
-  },
+
   "Beawar Urban Co-operative Bank Ltd.": {
     requester: "Sourabh Bhardwaj",
     approver: "Anil Devnani",
