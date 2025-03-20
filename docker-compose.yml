@@ -8,11 +8,12 @@ services:
       - "27017:27017"
     volumes:
       - mongo-data:/data/db
+      - ./mongod.conf:/etc/mongod.conf  # Mount custom config file
     environment:
       - MONGO_INITDB_DATABASE=mernapp
       - MONGO_INITDB_ROOT_USERNAME=admin
       - MONGO_INITDB_ROOT_PASSWORD=secret
-    command: mongod --quiet  # Reduce log verbosity
+    command: mongod --config /etc/mongod.conf  # Use custom config file
 
   server:
     build: ./backend
