@@ -12,11 +12,12 @@ services:
       - MONGO_INITDB_DATABASE=mernapp
       - MONGO_INITDB_ROOT_USERNAME=admin
       - MONGO_INITDB_ROOT_PASSWORD=secret
+    command: mongod --quiet  # Reduce log verbosity
 
   server:
     build: ./backend
     ports:
-      - "2026:2026"  
+      - "2026:2026"
     depends_on:
       - mongo
     environment:
@@ -25,7 +26,7 @@ services:
   client:
     build: ./frontend
     ports:
-      - "2025:2025"  
+      - "2025:2025"
     depends_on:
       - server
 
