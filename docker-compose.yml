@@ -8,6 +8,8 @@ services:
       - "27017:27017"
     volumes:
       - mongo-data:/data/db
+      - ./mongod.conf:/etc/mongod.conf  # Mount custom config file
+    command: mongod --config /etc/mongod.conf  # Use custom config file
 
   server:
     build: ./backend
@@ -16,7 +18,7 @@ services:
     depends_on:
       - mongo
     environment:
-      - MONGO_URI=mongodb://mongo:27017/mernapp  # Use "mongo" as the hostname
+      - MONGO_URI=mongodb://mongo:27017/mernapp  # No authentication
 
   client:
     build: ./frontend
@@ -28,3 +30,8 @@ services:
 volumes:
   mongo-data:
     driver: local
+
+
+
+
+    
