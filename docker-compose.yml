@@ -3,27 +3,24 @@ version: '3.8'
 services:
   mongo:
     image: mongo:latest
-    container_name: mongo
     ports:
       - "27017:27017"
     volumes:
       - mongo-data:/data/db
 
   server:
-    build: ./server
-    container_name: server
+    build: ./backend
     ports:
-      - "5000:5000"
+      - "2026:2026"  
     depends_on:
       - mongo
     environment:
       - MONGO_URI=mongodb://mongo:27017/mernapp
 
   client:
-    build: ./client
-    container_name: client
+    build: ./frontend
     ports:
-      - "80:80"
+      - "2025:2025"  
     depends_on:
       - server
 
