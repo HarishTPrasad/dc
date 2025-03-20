@@ -12,7 +12,7 @@ app.use(cors({
 app.use(express.json()); // Parse JSON request bodies
 
 // MongoDB Connection
-const MONGO_URI = "mongodb://mongo:27017/mernapp"; // Use "mongo" as the hostname (Docker service name)
+const MONGO_URI = "mongodb://mongo:27017/dc"; // Use "mongo" as the hostname (Docker service name)
 
 const connectWithRetry = () => {
   mongoose
