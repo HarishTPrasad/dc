@@ -12,11 +12,20 @@ app.use(cors({
 app.use(express.json()); // Parse JSON request bodies
 
 // MongoDB Connection
-const MONGO_URI = "mongodb://admin:secret@mongo:27017/mernapp?authSource=admin"; // Use "mongo" as the hostname (Docker service name)
-mongoose
-  .connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log("Connected to MongoDB"))
-  .catch((err) => console.error("MongoDB connection error:", err));
+const MONGO_URI = "mongodb://mongo:27017/mernapp"; // Use "mongo" as the hostname (Docker service name)
+
+const connectWithRetry = () => {
+  mongoose
+    .connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => console.log("Connected to MongoDB"))
+    .catch((err) => {
+      console.error("MongoDB connection error:", err);
+      console.log("Retrying connection in 5 seconds...");
+      setTimeout(connectWithRetry, 5000); // Retry connection after 5 seconds
+    });
+};
+
+connectWithRetry(); // Initial connection attempt
 
 // Import FormModel
 const FormModel = require("./models/FormModel");

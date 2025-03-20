@@ -9,10 +9,6 @@ services:
     volumes:
       - mongo-data:/data/db
       - ./mongod.conf:/etc/mongod.conf  # Mount custom config file
-    environment:
-      - MONGO_INITDB_DATABASE=mernapp
-      - MONGO_INITDB_ROOT_USERNAME=admin
-      - MONGO_INITDB_ROOT_PASSWORD=secret
     command: mongod --config /etc/mongod.conf  # Use custom config file
 
   server:
@@ -22,7 +18,7 @@ services:
     depends_on:
       - mongo
     environment:
-      - MONGO_URI=mongodb://admin:secret@mongo:27017/mernapp?authSource=admin
+      - MONGO_URI=mongodb://mongo:27017/mernapp  # No authentication
 
   client:
     build: ./frontend
