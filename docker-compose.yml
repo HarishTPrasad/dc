@@ -18,7 +18,7 @@ services:
     depends_on:
       - mongo
     environment:
-      - MONGO_URI=mongodb://mongo:27017/dc # No authentication
+      - MONGO_URI=mongodb://mongo:27017/mernapp  # No authentication
 
   client:
     build: ./frontend

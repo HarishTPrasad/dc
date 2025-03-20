@@ -7,12 +7,12 @@ const app = express();
 
 // Middleware
 app.use(cors({
-  origin: "http://localhost:2025", // Allow requests from the React frontend running on port 2025
+  origin: "http://10.0.1.221:2025", // Allow requests from the React frontend running on port 2025
 }));
 app.use(express.json()); // Parse JSON request bodies
 
 // MongoDB Connection
-const MONGO_URI = "mongodb://mongo:27017/dc"; // Use "mongo" as the hostname (Docker service name)
+const MONGO_URI = "mongodb://mongo:27017/mernapp"; // Use "mongo" as the hostname (Docker service name)
 
 const connectWithRetry = () => {
   mongoose
