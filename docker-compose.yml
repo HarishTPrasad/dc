@@ -10,13 +10,19 @@ services:
       - mongo-data:/data/db
       - ./mongod.conf:/etc/mongod.conf  # Mount custom config file
     command: mongod --config /etc/mongod.conf  # Use custom config file
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   server:
     build: ./backend
     ports:
       - "2026:2026"
     depends_on:
-      - mongo
+      mongo:
+        condition: service_healthy  # Wait for MongoDB to be ready
     environment:
       - MONGO_URI=mongodb://mongo:27017/mernapp  # No authentication
 
@@ -30,8 +36,3 @@ services:
 volumes:
   mongo-data:
     driver: local
-
-
-
-
-    
