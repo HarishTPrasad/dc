@@ -3,10 +3,15 @@ version: '3.8'
 services:
   mongo:
     image: mongo:latest
+    restart: unless-stopped
     ports:
       - "27017:27017"
     volumes:
       - mongo-data:/data/db
+    environment:
+      - MONGO_INITDB_DATABASE=mernapp
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=secret
 
   server:
     build: ./backend
@@ -15,7 +20,7 @@ services:
     depends_on:
       - mongo
     environment:
-      - MONGO_URI=mongodb://mongo:27017/mernapp
+      - MONGO_URI=mongodb://admin:secret@mongo:27017/mernapp?authSource=admin
 
   client:
     build: ./frontend
@@ -26,3 +31,4 @@ services:
 
 volumes:
   mongo-data:
+    driver: local
