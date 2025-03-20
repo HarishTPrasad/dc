@@ -16,7 +16,7 @@ const MONGO_URI = "mongodb://mongo:27017/mernapp"; // Use "mongo" as the hostnam
 
 const connectWithRetry = () => {
   mongoose
-    .connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+    .connect(MONGO_URI) // Remove deprecated options
     .then(() => console.log("Connected to MongoDB"))
     .catch((err) => {
       console.error("MongoDB connection error:", err);
