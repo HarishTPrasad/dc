@@ -10,7 +10,7 @@ app.use(cors());
 app.use(express.json()); // Parse JSON request bodies
 
 // MongoDB Connection
-const MONGO_URI = "mongodb://localhost:27017/dc"; // Database name: dc
+const MONGO_URI = "mongodb://mongodb:27017/dc"; // Database name: dc
 mongoose
   .connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log("Connected to MongoDB"))
