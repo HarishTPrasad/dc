@@ -29,8 +29,7 @@ services:
     build: ./frontend
     ports:
       - "10.0.1.221:2025:2025"  # Bind frontend to host IP 10.0.1.221 and port 2025
-    depends_on:
-      - server
+
 
 volumes:
   mongo-data:
