@@ -1,13 +1,14 @@
+
 services:
   mongo:
     image: mongo:latest
     restart: unless-stopped
     ports:
-      - "10.0.1.221:27017:27017"  # Bind MongoDB to host IP and port
+      - "27017:27017"
     volumes:
-      - mongo-data:/data/db  # Persist MongoDB data
+      - mongo-data:/data/db
       - ./mongod.conf:/etc/mongod.conf  # Mount custom config file
-    command: mongod --config /etc/mongod.conf
+    command: mongod --config /etc/mongod.conf  # Use custom config file
     healthcheck:
       test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
       interval: 10s
@@ -16,24 +17,20 @@ services:
 
   server:
     build: ./backend
-    restart: unless-stopped
     ports:
-      - "10.0.1.221:2026:2026"  # Bind backend to host IP and port
+      - "2026:2026"
     depends_on:
       mongo:
         condition: service_healthy  # Wait for MongoDB to be ready
     environment:
-      - MONGO_URI=mongodb://mongo:27017/mernapp  # MongoDB connection string
+      - MONGO_URI=mongodb://mongo:27017/mernapp  # No authentication
 
   client:
-    build: ./frontend
-    restart: unless-stopped
+    build: ./frontend/app
     ports:
-      - "10.0.1.221:2025:80"  # Map container's Nginx (port 80) to host port 2025
+      - "2025:80"
     depends_on:
-      - server  # Ensure frontend starts after the backend
-    volumes:
-      - ./frontend/build:/usr/share/nginx/html  # Serve React build files
+      - server
 
 volumes:
   mongo-data:

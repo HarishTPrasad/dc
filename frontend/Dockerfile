@@ -1,33 +1,29 @@
-# Stage 1: Build the frontend
-FROM node:18 AS build
+# Use an official Node.js runtime as a parent image
+FROM node:16 as build
+
+# Set the working directory
 WORKDIR /app
 
-# Copy package files and install dependencies separately for better caching
-COPY package.json package-lock.json ./
-RUN npm install --frozen-lockfile
+# Copy package.json and package-lock.json
+COPY package*.json ./
 
-# Copy the rest of the app files and build
+# Install dependencies
+RUN npm install
+
+# Copy the rest of the application code
 COPY . .
+
+# Build the React app
 RUN npm run build
 
-# Stage 2: Serve with Nginx
+# Use Nginx to serve the static files
 FROM nginx:alpine
 
-# Remove default Nginx static files
-RUN rm -rf /usr/share/nginx/html/*
-
-# Copy built frontend files from the previous stage
+# Copy the build output to replace the default nginx contents.
 COPY --from=build /app/build /usr/share/nginx/html
 
-# Copy custom Nginx configuration if available; otherwise, fallback to default
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-
-# Ensure Nginx runs with non-root user for security (optional)
-RUN chown -R nginx:nginx /usr/share/nginx/html
-USER nginx
-
 # Expose port 80
-EXPOSE 80
+EXPOSE 2025
 
 # Start Nginx
 CMD ["nginx", "-g", "daemon off;"]
