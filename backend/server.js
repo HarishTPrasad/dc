@@ -6,9 +6,11 @@ require("dotenv").config();
 const app = express();
 
 // Middleware
-app.use(cors({
-  origin: "http://10.0.1.221:2025", // Allow requests from the React frontend running on port 2025
-}));
+app.use(
+  cors({
+    origin: "http://10.0.1.221:2025", // Allow requests from the React frontend running on port 2025
+  })
+);
 app.use(express.json()); // Parse JSON request bodies
 
 // MongoDB Connection
@@ -16,7 +18,10 @@ const MONGO_URI = "mongodb://mongo:27017/mernapp"; // Use "mongo" as the hostnam
 
 const connectWithRetry = () => {
   mongoose
-    .connect(MONGO_URI) // Remove deprecated options
+    .connect(MONGO_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    })
     .then(() => console.log("Connected to MongoDB"))
     .catch((err) => {
       console.error("MongoDB connection error:", err);
@@ -48,6 +53,11 @@ app.post("/api/submit-form", async (req, res) => {
     console.error("Error saving form data:", err);
     res.status(400).json({ error: err.message });
   }
+});
+
+// Health check endpoint
+app.get("/api/health", (req, res) => {
+  res.status(200).json({ status: "OK" });
 });
 
 // Start the server

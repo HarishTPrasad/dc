@@ -1,12 +1,12 @@
-
+version: "3.8"
 services:
   mongo:
     image: mongo:latest
     restart: unless-stopped
     ports:
-      - "27017:27017"
+      - "10.0.1.221:27017:27017"  # Bind MongoDB to host IP 10.0.1.221 and port 27017
     volumes:
-      - mongo-data:/data/db
+      - mongo-data:/data/db  # Persist MongoDB data
       - ./mongod.conf:/etc/mongod.conf  # Mount custom config file
     command: mongod --config /etc/mongod.conf  # Use custom config file
     healthcheck:
@@ -18,17 +18,17 @@ services:
   server:
     build: ./backend
     ports:
-      - "2026:2026"
+      - "10.0.1.221:2026:2026"  # Bind backend to host IP 10.0.1.221 and port 2026
     depends_on:
       mongo:
         condition: service_healthy  # Wait for MongoDB to be ready
     environment:
-      - MONGO_URI=mongodb://mongo:27017/mernapp  # No authentication
+      - MONGO_URI=mongodb://mongo:27017/mernapp  # MongoDB connection string
 
   client:
     build: ./frontend
     ports:
-      - "2025:2025"
+      - "10.0.1.221:2025:2025"  # Bind frontend to host IP 10.0.1.221 and port 2025
     depends_on:
       - server
 
