@@ -1,3 +1,4 @@
+version: "3.8"
 
 services:
   mongo:
@@ -7,8 +8,8 @@ services:
       - "27017:27017"
     volumes:
       - mongo-data:/data/db
-      - ./mongod.conf:/etc/mongod.conf  # Mount custom config file
-    command: mongod --config /etc/mongod.conf  # Use custom config file
+      - ./mongod.conf:/etc/mongod.conf  # Mount custom MongoDB config file
+    command: mongod --config /etc/mongod.conf
     healthcheck:
       test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
       interval: 10s
@@ -17,20 +18,28 @@ services:
 
   server:
     build: ./backend
+    restart: unless-stopped
     ports:
       - "2026:2026"
     depends_on:
       mongo:
-        condition: service_healthy  # Wait for MongoDB to be ready
+        condition: service_healthy  # Ensure MongoDB is ready before starting backend
     environment:
-      - MONGO_URI=mongodb://mongo:27017/mernapp  # No authentication
+      - MONGO_URI=mongodb://mongo:27017/mernapp  # MongoDB connection string
+    volumes:
+      - ./backend:/app
+      - /app/node_modules  # Avoid overwriting node_modules
 
   client:
-    build: ./frontend/app
+    build: ./frontend
+    restart: unless-stopped
     ports:
-      - "2025:80"
+      - "2025:80"  # Nginx serves frontend on port 80, mapped to host 2025
     depends_on:
-      - server
+      - server  # Start frontend only after the backend is up
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules  # Avoid overwriting node_modules
 
 volumes:
   mongo-data:
