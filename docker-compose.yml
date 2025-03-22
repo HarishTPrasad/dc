@@ -1,4 +1,4 @@
-
+version: "3.8"
 
 services:
   mongo:
@@ -35,12 +35,12 @@ services:
     restart: unless-stopped
     ports:
       - "2025:80"  # Nginx serves frontend on port 80, mapped to host 2025
-    # depends_on:
-    #   - server  # Start frontend only after the backend is up
+    depends_on:
+      - server  # Start frontend only after the backend is up
     volumes:
       - ./frontend:/app
       - /app/node_modules  # Avoid overwriting node_modules
 
-# volumes:
-#   mongo-data:
-#     driver: local
+volumes:
+  mongo-data:
+    driver: local
