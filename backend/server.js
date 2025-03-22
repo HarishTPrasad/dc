@@ -8,7 +8,7 @@ const app = express();
 // Middleware
 app.use(
   cors({
-    origin: "http://10.0.1.221:2025", // Allow requests from the React frontend running on port 2025
+    origin: "http://localhost:2025", // Allow requests from the React frontend running on port 2025
   })
 );
 app.use(express.json()); // Parse JSON request bodies
