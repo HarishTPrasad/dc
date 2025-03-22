@@ -212,31 +212,31 @@ function FormA() {
     }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Form Data Submitted:", formData);
-
-    navigate("/output", { state: { formData } });
-  };
-
-  // const handleSubmit = async (e) => {
+  // const handleSubmit = (e) => {
   //   e.preventDefault();
+  //   console.log("Form Data Submitted:", formData);
 
-  //   try {
+  //   navigate("/output", { state: { formData } });
+  // };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
     
-  //     const response = await api.post("/submit-form", formData);
+      // const response = await api.post("/submit-form", formData);
 
      
-  //     console.log("Form submitted successfully:", response.data);
+      // console.log("Form submitted successfully:", response.data);
 
     
-  //     navigate("/output", { state: { formData } });
-  //   } catch (err) {
+      navigate("/output", { state: { formData } });
+    } catch (err) {
  
-  //     console.error("Error submitting form:", err);
-  //     alert("Failed to submit form. Please try again.");
-  //   }
-  // };
+      console.error("Error submitting form:", err);
+      alert("Failed to submit form. Please try again.");
+    }
+  };
 
   return (
     <>
