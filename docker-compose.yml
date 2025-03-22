@@ -1,3 +1,51 @@
+# version: "3.8"
+
+# services:
+#   mongo:
+#     image: mongo:latest
+#     restart: unless-stopped
+#     ports:
+#       - "27017:27017"
+#     volumes:
+#       - mongo-data:/data/db
+#       - ./mongod.conf:/etc/mongod.conf  # Mount custom MongoDB config file
+#     command: mongod --config /etc/mongod.conf
+#     healthcheck:
+#       test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+#       interval: 10s
+#       timeout: 5s
+#       retries: 5
+
+#   server:
+#     build: ./backend
+#     restart: unless-stopped
+#     ports:
+#       - "2026:2026"
+#     depends_on:
+#       mongo:
+#         condition: service_healthy  # Ensure MongoDB is ready before starting backend
+#     environment:
+#       - MONGO_URI=mongodb://mongo:27017/mernapp  # MongoDB connection string
+#     volumes:
+#       - ./backend:/app
+#       - /app/node_modules  # Avoid overwriting node_modules
+
+#   client:
+#     build: ./frontend
+#     restart: unless-stopped
+#     ports:
+#       - "2025:80"  # Nginx serves frontend on port 80, mapped to host 2025
+#     depends_on:
+#       - server  # Start frontend only after the backend is up
+#     volumes:
+#       - ./frontend:/app
+#       - /app/node_modules  # Avoid overwriting node_modules
+
+# volumes:
+#   mongo-data:
+#     driver: local
+
+
 version: "3.8"
 
 services:
@@ -11,7 +59,7 @@ services:
       - ./mongod.conf:/etc/mongod.conf  # Mount custom MongoDB config file
     command: mongod --config /etc/mongod.conf
     healthcheck:
-      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      test: echo 'db.runCommand("ping").ok' | mongosh --host localhost:27017 --quiet
       interval: 10s
       timeout: 5s
       retries: 5
@@ -28,7 +76,7 @@ services:
       - MONGO_URI=mongodb://mongo:27017/mernapp  # MongoDB connection string
     volumes:
       - ./backend:/app
-      - /app/node_modules  # Avoid overwriting node_modules
+      - /app/node_modules  # Ensure node_modules isn't overwritten
 
   client:
     build: ./frontend
@@ -36,10 +84,10 @@ services:
     ports:
       - "2025:80"  # Nginx serves frontend on port 80, mapped to host 2025
     depends_on:
-      - server  # Start frontend only after the backend is up
+      - server  # Start frontend only after backend is ready
     volumes:
       - ./frontend:/app
-      - /app/node_modules  # Avoid overwriting node_modules
+      - /app/node_modules  # Ensure node_modules isn't overwritten
 
 volumes:
   mongo-data:
